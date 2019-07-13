@@ -7,14 +7,13 @@ import (
 
 	"os"
 
-	. "github.com/hfmrow/csveditor/genLib"
-
 	"github.com/andlabs/ui"
+	"github.com/hfmrow/csveditor/genLib"
 )
 
 // App infos
 const appName = "Csv Editor"
-const appVers = "v1.5.2"
+const appVers = "v1.6.1"
 const appCreat = "H.F.M"
 const copyRight = "©2018 MIT licence"
 
@@ -37,7 +36,7 @@ var tableDatas [][]string           // Store CSV datas
 var aditionalVisibleColumns int = 2 // Column 0 checkbox, column 1 for checkBox text
 
 // Some other usefull declarations
-var charsetList CharsetList // Store Different charset names
+var charsetList genLib.CharsetList // Store Different charset names
 var lastSpinboxOptionFieldsValue int = 1
 var lastDelSpinboxOptionFieldsValue int = 1
 var sortFields []int // Used to store fields in sortCompare tab
@@ -78,13 +77,13 @@ func getValChar(val string, in interface{}) interface{} {
 	case string:
 		switch val {
 		case "s":
-			return GetStrIndex(SeP, in.(string))
+			return genLib.GetStrIndex(SeP, in.(string))
 		case "c":
-			return GetStrIndex(CrlF, in.(string))
+			return genLib.GetStrIndex(CrlF, in.(string))
 		case "y":
-			return GetStrIndex(YesnO, in.(string))
+			return genLib.GetStrIndex(YesnO, in.(string))
 		case "t":
-			return GetStrIndex(TypE, in.(string))
+			return genLib.GetStrIndex(TypE, in.(string))
 		default:
 			return fmt.Errorf("Unexpected data type: %s", val)
 		}
@@ -192,7 +191,7 @@ func (cr *CheckedRow) NotEmpty() bool { // Check if struct is empty or not
 // Change current dir ... (debug purpose)
 func chgToSpecificDir(dir string) {
 	err := os.Chdir(dir)
-	Check(err, "os.Chdir")
+	genLib.Check(err, "os.Chdir")
 }
 
 // Convert date format, input "Day" or "%d", return 0,  "Month" or "%m", return 1 ...

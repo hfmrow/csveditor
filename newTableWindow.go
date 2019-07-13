@@ -8,9 +8,8 @@ import (
 	"io/ioutil"
 	"strings"
 
-	. "github.com/hfmrow/csveditor/genLib"
-
 	"github.com/andlabs/ui"
+	"github.com/hfmrow/csveditor/genLib"
 	"golang.org/x/net/html/charset"
 )
 
@@ -54,7 +53,7 @@ func newTableWindow() {
 		fieldNames := entryBox.Text()
 		if fieldNames != "" {
 			// Get charset and convert to utf-8 if needed
-			charSET := DetectCharsetStr(fieldNames)
+			charSET := genLib.DetectCharsetStr(fieldNames)
 			if charSET != "utf-8" {
 				r, _ := charset.NewReader(strings.NewReader(fieldNames), charSET) // convert to UTF-8
 				textFileBytes, _ := ioutil.ReadAll(r)
@@ -71,10 +70,19 @@ func newTableWindow() {
 
 				filename := DialogBoxSve(mainwin)
 				if filename != "" {
-					WriteCsv(filename, ",", records)
+// fixing issue when new csv file created. (
+					if len(records) < 2 {
+						var tmpRow []string
+						for idx := len(records[0]); idx > 0; idx-- {
+							tmpRow = append(tmpRow, " ")
+						}
+						records = append(records, tmpRow)
+					}
+
+					genLib.WriteCsv(filename, ",", records)
 					// Remove previous opt file if exist
 					optFilename := getOptFileName(filename)
-					RemovIfExist(optFilename)
+					genLib.RemovIfExist(optFilename)
 					// Initialising storeProfiles
 					storeProfiles = NewStoreProfiles()
 					// Load, Store and set CSV
