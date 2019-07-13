@@ -1,0 +1,9 @@
+Version infos
+- Search methode improved.
+
+
+* Bugs
+- Multiple lines displayed in title window and footbar. FIXED
+- In search function, Filename not displayed correctly. FIXED
+- In search function, substitution between Case-sensitive and Whole-word. FIXED
+- Crash while creating new csv file. FIXED

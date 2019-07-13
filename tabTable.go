@@ -5,9 +5,8 @@ package main
 import (
 	"fmt"
 
-	. "github.com/hfmrow/csveditor/genLib"
-
 	"github.com/andlabs/ui"
+	"github.com/hfmrow/csveditor/genLib"
 )
 
 func tabTable(filename string) ui.Control {
@@ -78,15 +77,15 @@ func tabTable(filename string) ui.Control {
 	buttonSearch.OnClicked(func(*ui.Button) {
 		if CsvProfileList.Initialised { // If there is something to save, do it ...
 			DialogBoxEntrySearch(mainwin, "Search in :  ", "Ok", "Cancel", func(entry string, cs, ww, rx bool) {
-				filename := tempDir + GenFileName() + ".tmp" // Create temp file to store result ...
-				foundDatas, err := SearchSl(entry, tableDatas, cs, ww, rx)
+				filename := tempDir + genLib.GenFileName() + ".tmp" // Create temp file to store result ...
+				foundDatas, err := genLib.SearchSl(entry, tableDatas, cs, false, false, rx, ww)
 				if err == nil {
 					var tmpDatas [][]string
 					// Add column names to new table
 					tmpDatas = append(tmpDatas, CsvProfileList.FieldNames)
 					foundDatas = append(tmpDatas, foundDatas...)
 					// Write it
-					WriteCsv(filename, ",", foundDatas)
+					genLib.WriteCsv(filename, ",", foundDatas)
 					// Load, Store and set CSV
 					addAndSetCsv(filename, "Search")
 					ChkRow.Reset() // Reset stored checked rows history
@@ -95,7 +94,7 @@ func tabTable(filename string) ui.Control {
 				} else {
 					DialogBoxMsg(mainwin, "Information", fmt.Sprintf("%s", err))
 				}
-			}, func() {}, TruncateString(CsvProfileList.FileName, " ... ", 100, 2))
+			}, func() {}, genLib.TruncateString(CsvProfileList.FileName, " ... ", 60, 2))
 		}
 	})
 
@@ -109,7 +108,7 @@ func tabTable(filename string) ui.Control {
 			if filename != "" {
 				CsvProfileList.FileName = filename
 				doCheckAndSaveOnExit(&CsvProfileList)
-				mainwin.SetTitle(TruncateString(CsvProfileList.FileName, "...", 80, 1))
+				mainwin.SetTitle(genLib.TruncateString(CsvProfileList.FileName, "...", 80, 1))
 				refreshOption()
 			}
 		}
@@ -152,7 +151,7 @@ func makeTable(vbox *ui.Box) *ui.Box {
 
 	onTheFlyEditCheckBox := ui.NewCheckbox("On the fly cell edition")
 	onTheFlyEditCheckBox.OnToggled(func(*ui.Checkbox) { onTheFlyEdit = onTheFlyEditCheckBox.Checked() })
-	titleLabel := ui.NewLabel(fmt.Sprintln(appName, appVers, appCreat, copyRight))
+	titleLabel := ui.NewLabel(fmt.Sprint(appName, appVers, appCreat, copyRight))
 	storedProfilesCbx := ui.NewCombobox()
 	profFootBar = profFootBar[:0] // Reset tmp footBarStorage history
 	for idx := 0; idx < len(storeProfiles); idx++ {

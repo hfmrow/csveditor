@@ -5,9 +5,8 @@ package main
 import (
 	"fmt"
 
-	. "github.com/hfmrow/csveditor/genLib"
-
 	"github.com/andlabs/ui"
+	"github.com/hfmrow/csveditor/genLib"
 )
 
 func tabMakeSort(vbox *ui.Box) *ui.Box {
@@ -23,7 +22,7 @@ func tabMakeSort(vbox *ui.Box) *ui.Box {
 		// First part in a group
 		gridSort := ui.NewGrid()
 		gridSort.SetPadded(true)
-		groupSort := ui.NewGroup("   C.S.V sorting:  " + TruncateString(CsvProfileList.FileName, "...", 80, 1))
+		groupSort := ui.NewGroup("   C.S.V sorting:  " + genLib.TruncateString(CsvProfileList.FileName, "...", 80, 1))
 		groupSort.SetMargined(true)
 		groupSort.SetChild(gridSort)
 		vbox.Append(groupSort, false)
@@ -72,15 +71,15 @@ func tabMakeSort(vbox *ui.Box) *ui.Box {
 				sortedDatas := make([][]string, len(tableDatas))
 				copy(sortedDatas, tableDatas)
 				// Create temp filename to store result ...
-				filename := tempDir + GenFileName() + ".tmp"
+				filename := tempDir + genLib.GenFileName() + ".tmp"
 				for _, fieldIdx := range sortFields {
 					switch CsvProfileList.FieldType[fieldIdx] {
 					case TypE[0]: // Date
-						sortedDatas = SliceSortDate(sortedDatas, CsvProfileList.DateFormat+" %H:%M:%S", fieldIdx, -1, sortAscDscCheckbox[fieldIdx].fChkbox.Checked())
+						sortedDatas = genLib.SliceSortDate(sortedDatas, CsvProfileList.DateFormat+" %H:%M:%S", fieldIdx, -1, sortAscDscCheckbox[fieldIdx].fChkbox.Checked())
 					case TypE[1]: // String
-						SliceSortString(sortedDatas, fieldIdx, sortAscDscCheckbox[fieldIdx].fChkbox.Checked(), caseSensitiveSortFlag)
+						genLib.SliceSortString(sortedDatas, fieldIdx, sortAscDscCheckbox[fieldIdx].fChkbox.Checked(), caseSensitiveSortFlag)
 					case TypE[2]: // Numeric
-						SliceSortFloat(sortedDatas, fieldIdx, sortAscDscCheckbox[fieldIdx].fChkbox.Checked(), CsvProfileList.DecimalSep)
+						genLib.SliceSortFloat(sortedDatas, fieldIdx, sortAscDscCheckbox[fieldIdx].fChkbox.Checked(), CsvProfileList.DecimalSep)
 					default:
 						fmt.Println("Sort Error: Bad field type !")
 					}
@@ -88,7 +87,7 @@ func tabMakeSort(vbox *ui.Box) *ui.Box {
 				CsvProfileList.Modified = true // Something changed, store information
 				sortedDatas = append(tmpDatas, sortedDatas...)
 				// Write it
-				WriteCsv(filename, ",", sortedDatas)
+				genLib.WriteCsv(filename, ",", sortedDatas)
 				// Load, Store and set CSV
 				addAndSetCsv(filename, "Sort")
 				ChkRow.Reset() // Reset stored checked rows history

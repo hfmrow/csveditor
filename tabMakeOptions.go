@@ -5,9 +5,8 @@ package main
 import (
 	"strings"
 
-	. "github.com/hfmrow/csveditor/genLib"
-
 	"github.com/andlabs/ui"
+	"github.com/hfmrow/csveditor/genLib"
 )
 
 func tabMakeOptions(vbox *ui.Box) *ui.Box {
@@ -23,7 +22,7 @@ func tabMakeOptions(vbox *ui.Box) *ui.Box {
 		// First part in a group
 		gridComma := ui.NewGrid()
 		gridComma.SetPadded(true)
-		groupCommaQuote := ui.NewGroup("   C.S.V format:  " + TruncateString(CsvProfileList.FileName, "...", 80, 1))
+		groupCommaQuote := ui.NewGroup("   C.S.V format:  " + genLib.TruncateString(CsvProfileList.FileName, "...", 80, 1))
 		groupCommaQuote.SetMargined(true)
 		groupCommaQuote.SetChild(gridComma)
 		vbox.Append(groupCommaQuote, false)
@@ -91,7 +90,7 @@ func tabMakeOptions(vbox *ui.Box) *ui.Box {
 		fmtDate3.OnSelected(func(*ui.Combobox) { storeDateFmt(fmtDate3.Selected(), 2) })
 
 		outCharset := ui.NewCombobox()
-		CharsetList := NewCharsetList()
+		CharsetList := genLib.NewCharsetList()
 
 		// Populate charset names (combobox)
 		for _, cs := range CharsetList.SimpleCharsetList {

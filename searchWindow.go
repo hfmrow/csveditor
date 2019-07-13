@@ -36,9 +36,11 @@ func DialogBoxEntrySearch(mainwin *ui.Window, title, yes, no string, fyes func(e
 	chkRegex := ui.NewCheckbox("Use regex")
 	chkWholeWord.OnToggled(func(*ui.Checkbox) {
 		chkRegex.SetChecked(false)
+		chkWholeWord.SetChecked(true)
 	})
 	chkRegex.OnToggled(func(*ui.Checkbox) {
 		chkWholeWord.SetChecked(false)
+		chkRegex.SetChecked(true)
 	})
 	hbox.Append(chkWholeWord, true)
 	hbox.Append(chkCaseSensitive, true)

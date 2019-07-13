@@ -4,7 +4,7 @@ package main
 
 import (
 	"github.com/andlabs/ui"
-	. "github.com/hfmrow/csveditor/genLib"
+	"github.com/hfmrow/csveditor/genLib"
 )
 
 func tabMakeOptionFields(vbox *ui.Box) *ui.Box {
@@ -16,7 +16,7 @@ func tabMakeOptionFields(vbox *ui.Box) *ui.Box {
 	groupFields.SetChild(gridFields)
 	vbox.Append(groupFields, false)
 	// If there is nothing to display, skip it ...
-	//	if CsvProfileList.Initialised {
+	// if CsvProfileList.Initialised {
 
 	// Add field button with spinbox
 	fieldNewButton := ui.NewButton("Add field")
@@ -24,14 +24,14 @@ func tabMakeOptionFields(vbox *ui.Box) *ui.Box {
 	fieldSpinBox.SetValue(lastSpinboxOptionFieldsValue)
 	fieldNewButton.OnClicked(func(*ui.Button) {
 		lastSpinboxOptionFieldsValue = fieldSpinBox.Value()
-		CsvProfileList.FieldNames = AppendAt(CsvProfileList.FieldNames, fieldSpinBox.Value()-1, "New field")
-		CsvProfileList.FieldDisplay = AppendAt(CsvProfileList.FieldDisplay, fieldSpinBox.Value()-1, getValChar("y", 0).(string)) // "Yes"
-		CsvProfileList.FieldOut = AppendAt(CsvProfileList.FieldOut, fieldSpinBox.Value()-1, getValChar("y", 0).(string))         // "Yes"
-		CsvProfileList.FieldType = AppendAt(CsvProfileList.FieldType, fieldSpinBox.Value()-1, getValChar("t", 1).(string))       // "String"
+		CsvProfileList.FieldNames = genLib.AppendAt(CsvProfileList.FieldNames, fieldSpinBox.Value()-1, "New field")
+		CsvProfileList.FieldDisplay = genLib.AppendAt(CsvProfileList.FieldDisplay, fieldSpinBox.Value()-1, getValChar("y", 0).(string)) // "Yes"
+		CsvProfileList.FieldOut = genLib.AppendAt(CsvProfileList.FieldOut, fieldSpinBox.Value()-1, getValChar("y", 0).(string))         // "Yes"
+		CsvProfileList.FieldType = genLib.AppendAt(CsvProfileList.FieldType, fieldSpinBox.Value()-1, getValChar("t", 1).(string))       // "String"
 		CsvProfileList.NumberCols++
 		CsvProfileList.Modified = true
 		for row := 0; row < CsvProfileList.NumberRows; row++ {
-			tableDatas[row] = AppendAt(tableDatas[row], lastSpinboxOptionFieldsValue-1, "")
+			tableDatas[row] = genLib.AppendAt(tableDatas[row], lastSpinboxOptionFieldsValue-1, "")
 		}
 		// Reset storeprofile and row checkbox selection
 		reloadMainStoreProfile()
@@ -56,14 +56,14 @@ func tabMakeOptionFields(vbox *ui.Box) *ui.Box {
 	fieldDelButton.OnClicked(func(*ui.Button) {
 		lastDelSpinboxOptionFieldsValue = fieldDelSpinBox.Value()
 		if CsvProfileList.NumberCols > 0 { // Limit operation to avoid out of range
-			CsvProfileList.FieldNames = DeleteSl(CsvProfileList.FieldNames, lastDelSpinboxOptionFieldsValue-1)
-			CsvProfileList.FieldDisplay = DeleteSl(CsvProfileList.FieldDisplay, lastDelSpinboxOptionFieldsValue-1)
-			CsvProfileList.FieldOut = DeleteSl(CsvProfileList.FieldOut, lastDelSpinboxOptionFieldsValue-1)
-			CsvProfileList.FieldType = DeleteSl(CsvProfileList.FieldType, lastDelSpinboxOptionFieldsValue-1)
+			CsvProfileList.FieldNames = genLib.DeleteSl(CsvProfileList.FieldNames, lastDelSpinboxOptionFieldsValue-1)
+			CsvProfileList.FieldDisplay = genLib.DeleteSl(CsvProfileList.FieldDisplay, lastDelSpinboxOptionFieldsValue-1)
+			CsvProfileList.FieldOut = genLib.DeleteSl(CsvProfileList.FieldOut, lastDelSpinboxOptionFieldsValue-1)
+			CsvProfileList.FieldType = genLib.DeleteSl(CsvProfileList.FieldType, lastDelSpinboxOptionFieldsValue-1)
 			CsvProfileList.NumberCols--
 			CsvProfileList.Modified = true
 			for row := 0; row < CsvProfileList.NumberRows; row++ {
-				tableDatas[row] = DeleteSl(tableDatas[row], lastDelSpinboxOptionFieldsValue-1)
+				tableDatas[row] = genLib.DeleteSl(tableDatas[row], lastDelSpinboxOptionFieldsValue-1)
 			}
 		}
 		// Reset storeprofile and row checkbox selection
@@ -120,7 +120,7 @@ func tabMakeOptionFields(vbox *ui.Box) *ui.Box {
 		dialogFields[idx].fType.SetSelected(getValChar("t", CsvProfileList.FieldType[idx]).(int))
 		dialogFields[idx].fType.OnSelected(func(*ui.Combobox) { recordFields() })
 	}
-	//	}
+	// }
 	return vbox
 }
 

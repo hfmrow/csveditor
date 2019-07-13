@@ -6,14 +6,14 @@ import (
 	"os"
 	"strings"
 
-	. "github.com/hfmrow/csveditor/genLib"
+	"github.com/hfmrow/csveditor/genLib"
 )
 
 // Update opt profile
 func updOptProfile(profileList *ProfileCsv) {
 	optFilename := getOptFileName(profileList.FileName)
 	profileList.Modified = false
-	WriteJson(optFilename, &profileList)
+	genLib.WriteJson(optFilename, &profileList)
 	CsvProfileList = *profileList
 }
 
@@ -47,14 +47,14 @@ func doCheckAndSaveOnExit(profileList *ProfileCsv) {
 		}
 		// Write to CSV file
 		restructuredCsv = tmpDatas
-		WriteCsv(profileList.FileName, strings.Replace(storeProfiles[0].Prof.OutComma, `"`, ``, -1), restructuredCsv) // Remove `"`
-		tmpProfileList = NewProfileCsv(profileList.FileName)                                                          // Re-create ProfileList
+		genLib.WriteCsv(profileList.FileName, strings.Replace(storeProfiles[0].Prof.OutComma, `"`, ``, -1), restructuredCsv) // Remove `"`
+		tmpProfileList = NewProfileCsv(profileList.FileName)                                                                 // Re-create ProfileList
 		tmpProfileList.FieldDisplay = FieldDisplay
 		tmpProfileList.FieldType = FieldType
 	} else {
 		// Write to CSV file without modification
-		WriteCsv(profileList.FileName, strings.Replace(storeProfiles[0].Prof.OutComma, `"`, ``, -1), restructuredCsv) // Remove `"`
-		tmpProfileList = NewProfileCsv(profileList.FileName)                                                          // Re-create ProfileList
+		genLib.WriteCsv(profileList.FileName, strings.Replace(storeProfiles[0].Prof.OutComma, `"`, ``, -1), restructuredCsv) // Remove `"`
+		tmpProfileList = NewProfileCsv(profileList.FileName)                                                                 // Re-create ProfileList
 		tmpProfileList.FieldDisplay = storeProfiles[0].Prof.FieldDisplay
 		tmpProfileList.FieldType = storeProfiles[0].Prof.FieldType
 	}
@@ -66,14 +66,14 @@ func doCheckAndSaveOnExit(profileList *ProfileCsv) {
 	tmpProfileList.OutCharset = storeProfiles[0].Prof.OutCharset
 	tmpProfileList.DecimalSep = storeProfiles[0].Prof.DecimalSep
 	// Convert charset if needed
-	actCharset := DetectCharsetFile(profileList.FileName)
+	actCharset := genLib.DetectCharsetFile(profileList.FileName)
 	if actCharset != storeProfiles[0].Prof.OutCharset {
-		FileCharsetSwitch(actCharset, storeProfiles[0].Prof.OutCharset, profileList.FileName)
+		genLib.FileCharsetSwitch(actCharset, storeProfiles[0].Prof.OutCharset, profileList.FileName)
 	}
 	// Convert Eol if needed
-	actEOL := GetEOL(profileList.FileName)
+	actEOL := genLib.GetEOL(profileList.FileName)
 	if actEOL != storeProfiles[0].Prof.OutCrlf {
-		SetEOL(profileList.FileName, storeProfiles[0].Prof.OutCrlf)
+		genLib.SetEOL(profileList.FileName, storeProfiles[0].Prof.OutCrlf)
 	}
 	// Save it
 	updOptProfile(&tmpProfileList)
@@ -81,7 +81,7 @@ func doCheckAndSaveOnExit(profileList *ProfileCsv) {
 
 // Make option file name (i.e replace .ext by .opt)
 func getOptFileName(filename string) string {
-	return SplitFilePath(filename, "opt").OutputNewExt
+	return genLib.SplitFilePath(filename, "opt").OutputNewExt
 }
 
 // Check for how to proceed where optfile exist or not ...
@@ -90,9 +90,9 @@ func rwProfileCsv(filename string) ProfileCsv {
 	profileList := NewProfileCsv(filename) // Create ProfileList
 
 	if _, err := os.Stat(optFilename); os.IsNotExist(err) { // Opt file does not exist
-		WriteJson(optFilename, &profileList) // then save it ...
+		genLib.WriteJson(optFilename, &profileList) // then save it ...
 	} else { // Opt file exist
-		ReadJson(optFilename, &profileList) // load it
+		genLib.ReadJson(optFilename, &profileList) // load it
 	}
 	return profileList
 }
@@ -100,7 +100,7 @@ func rwProfileCsv(filename string) ProfileCsv {
 // add csv to ProfileTables and set as default
 func addAndSetCsv(filename, name string) {
 	profile := rwProfileCsv(filename)
-	table := ReadCsv(filename, profile.Comma, profile.NumberCols, profile.FirstLine+1)
+	table := genLib.ReadCsv(filename, profile.Comma, profile.NumberCols, profile.FirstLine+1)
 	for idx := 0; idx < len(storeProfiles); idx++ {
 		if storeProfiles[idx].Name == name {
 			storeProfiles[idx].Prof = profile
@@ -128,7 +128,8 @@ func setProfile(name string) {
 					optionsBox.Enable()
 				}
 			}
-			mainwin.SetTitle(TruncateString(CsvProfileList.FileName, "...", 80, 1))
+			mainwin.SetTitle(genLib.TruncateString(CsvProfileList.FileName, "...", 80, 1))
+			break // ADDED 25-12
 		}
 	}
 }

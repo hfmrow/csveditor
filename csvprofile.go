@@ -9,7 +9,7 @@ import (
 
 	"strings"
 
-	. "github.com/hfmrow/csveditor/genLib"
+	"github.com/hfmrow/csveditor/genLib"
 )
 
 // Try to find informations about CSV file format like comma separator, quote separator, number of fields, first line with column names, endline type (crlf)
@@ -34,7 +34,7 @@ func (p *ProfileCsv) Init(filename string) {
 	p.FileName = filename
 
 	// Retrieve line end type
-	p.Crlf = GetEOL(filename)
+	p.Crlf = genLib.GetEOL(filename)
 	if p.OutCrlf == "" { // Set value for output if it is not set
 		p.OutCrlf = p.Crlf
 	}
@@ -43,16 +43,16 @@ func (p *ProfileCsv) Init(filename string) {
 	p.DateFormat = `%d-%m-%y`
 	p.DecimalSep = ","
 	p.Initialised = true
-	colCount := []RowStore{}
+	colCount := []genLib.RowStore{}
 	// Preparing input file
-	lines := TextFileToLines(filename, "-ct") // Load file in slice
-	newString := strings.Join(lines, " ")     //	Join lines to make unique string
+	lines := genLib.TextFileToLines(filename, "-ct") // Load file in slice
+	newString := strings.Join(lines, " ")            //	Join lines to make unique string
 
 	// Get Encoding
-	p.Charset = DetectCharsetFile(filename)
+	p.Charset = genLib.DetectCharsetFile(filename)
 	p.OutCharset = p.Charset
 	// Get separator and quote chars
-	tmpSep := GetSep(newString) // Get comma and quote
+	tmpSep := genLib.GetSep(newString) // Get comma and quote
 	p.Comma, _ = strconv.Unquote(tmpSep[0])
 	p.OutComma = p.Comma
 	p.Quote, _ = strconv.Unquote(tmpSep[1])
@@ -65,7 +65,7 @@ func (p *ProfileCsv) Init(filename string) {
 		r.Comma = sepRne[0]
 		records, err := r.Read() // Read line from csv reader to get fields count
 		if err == nil {          //	Store in slice column number for each lines. If error occure, just jump next line
-			colCount = AppendIfMissingC(colCount, RowStore{lineNb, len(records), 0, lines[lineNb]})
+			colCount = genLib.AppendIfMissingC(colCount, genLib.RowStore{lineNb, len(records), 0, lines[lineNb]})
 		}
 	}
 	// Find first line with same number of columns (mostly repeated)
@@ -84,7 +84,7 @@ func (p *ProfileCsv) Init(filename string) {
 	r := csv.NewReader(strings.NewReader(lines[colCount[highVal].Idx])) // Make newreader for csv (column names)
 	r.Comma = sepRne[0]
 	recordsFieldNames, err := r.Read()
-	Check(err, `Read col Names profile error !`)
+	genLib.Check(err, `Read col Names profile error !`)
 	p.FieldNames = recordsFieldNames
 	// Set Default values for display, output and type of columns
 	for idx := 0; idx < len(p.FieldNames); idx++ {
@@ -92,7 +92,7 @@ func (p *ProfileCsv) Init(filename string) {
 		p.FieldOut = append(p.FieldOut, "Yes")
 	}
 	// Check for column types. Not really accurate but do the job most of time.
-	tmpCsv := ReadCsv(p.FileName, p.Comma, p.NumberCols, p.FirstLine, p.NumberRows)
+	tmpCsv := genLib.ReadCsv(p.FileName, p.Comma, p.NumberCols, p.FirstLine, p.NumberRows)
 	var dateCount, floatCount, totalRow, totalRowCount int
 	var value string
 	if p.NumberRows > 10 {
@@ -100,35 +100,37 @@ func (p *ProfileCsv) Init(filename string) {
 	} else {
 		totalRow = len(tmpCsv) - 1
 	}
-	for idxCol, _ := range tmpCsv[0] {
-		for idxRow := 0; idxRow < totalRow; idxRow++ {
-			value = tmpCsv[idxRow][idxCol]
-			if value != "" {
-				totalRowCount++
-				if IsDate(value) {
-					dateCount++
-				} else if IsFloat(value) {
-					floatCount++
+	if len(tmpCsv) > 0 {
+		for idxCol, _ := range tmpCsv[0] {
+			for idxRow := 0; idxRow < totalRow; idxRow++ {
+				value = tmpCsv[idxRow][idxCol]
+				if value != "" {
+					totalRowCount++
+					if genLib.IsDate(value) {
+						dateCount++
+					} else if genLib.IsFloat(value) {
+						floatCount++
+					}
 				}
 			}
-		}
-		if totalRowCount == 0 { // To avoid divide by zero ...
-			dateCount = 0
-			floatCount = 0
-		} else {
-			dateCount = int(float64((dateCount * 100) / totalRowCount))
-			floatCount = int(float64((floatCount * 100) / totalRowCount))
-		}
-		totalRowCount = 0
-		switch {
-		case dateCount > 60:
-			p.FieldType = append(p.FieldType, "Date")
-			dateCount = 0
-		case floatCount > 60:
-			p.FieldType = append(p.FieldType, "Numeric")
-			floatCount = 0
-		default:
-			p.FieldType = append(p.FieldType, "String")
+			if totalRowCount == 0 { // To avoid divide by zero ...
+				dateCount = 0
+				floatCount = 0
+			} else {
+				dateCount = int(float64((dateCount * 100) / totalRowCount))
+				floatCount = int(float64((floatCount * 100) / totalRowCount))
+			}
+			totalRowCount = 0
+			switch {
+			case dateCount > 60:
+				p.FieldType = append(p.FieldType, "Date")
+				dateCount = 0
+			case floatCount > 60:
+				p.FieldType = append(p.FieldType, "Numeric")
+				floatCount = 0
+			default:
+				p.FieldType = append(p.FieldType, "String")
+			}
 		}
 	}
 }
@@ -139,12 +141,12 @@ func UpdateProfile(prof *ProfileCsv) *ProfileCsv {
 	prof.Charset = prof.OutCharset
 
 	tmpOutComma, err := strconv.Unquote(`"` + strings.Replace(prof.OutComma, `"`, ``, -1) + `"`)
-	Check(err, "Uodate comma profile error !")
+	genLib.Check(err, "Uodate comma profile error !")
 	prof.OutComma = tmpOutComma
 	prof.Comma = prof.OutComma
 
 	prof.OutQuote, err = strconv.Unquote(`"` + strings.Replace(prof.OutQuote, `"`, ``, -1) + `"`)
-	Check(err, "Uodate quote profile error !")
+	genLib.Check(err, "Uodate quote profile error !")
 	prof.Quote = prof.OutQuote
 	prof.Crlf = prof.OutCrlf
 

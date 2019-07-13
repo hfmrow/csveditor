@@ -9,19 +9,22 @@ import (
 	"github.com/andlabs/ui"
 	_ "github.com/andlabs/ui/winmanifest"
 
-	. "github.com/hfmrow/csveditor/genLib"
+	"github.com/hfmrow/csveditor/genLib"
 )
 
 // Main
 func main() {
+	var err error
 	// Get command line argument if exist.
 	if len(os.Args) > 1 {
 		argFilename = os.Args[1]
 	}
 
 	// Create TempDir
-	tempDir = TempMake(ReplaceSpace(appName)) + PathSep() // Init Tempdir
-	defer TempRemove(tempDir)
+	tempDir, err = genLib.TempMake(genLib.ReplaceSpace(appName)) // Init Tempdir
+	genLib.Check(err, "Create tmpdir")
+	tempDir = tempDir + genLib.GetPathSep()
+	defer genLib.TempRemove(tempDir)
 
 	// Start UI ...
 	ChkRow = NewCheckedRow() // Initialise checkedRows
@@ -30,7 +33,7 @@ func main() {
 
 // Setup GUI
 func setupUI() {
-	mainwin = ui.NewWindow(fmt.Sprintln(appName, appVers, appCreat, copyRight), 800, 600, true)
+	mainwin = ui.NewWindow(fmt.Sprint(appName, appVers, appCreat, copyRight), 800, 600, true)
 	mainwin.OnClosing(func(*ui.Window) bool {
 		returnFlag := false
 		if CsvProfileList.Initialised { // Check for existing profile
@@ -47,7 +50,7 @@ func setupUI() {
 					}, func() { // Cancel button pushed, don't exit and return to main window
 						mainwin.Enable()
 						returnFlag = false
-					}, "Save file ?", TruncateString(CsvProfileList.FileName, "...", 80, 2))
+					}, "Save file ?", genLib.TruncateString(CsvProfileList.FileName, "...", 80, 2))
 			} else { // Profile not modified, exit
 				ui.Quit()
 				returnFlag = true
