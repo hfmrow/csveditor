@@ -1,5 +1,8 @@
 # CsvEditor
 *A simple software to Edit, create, modify, search, sort, save csv files.*
+
+Take a look [here, H.F.M repositories](https://github.com/hfmrow/) for other useful linux softwares.
+
 - It is not designed to use with large csv files (over 10k entries), at the risk of longer processing times.
 - An issue exist with columns list, in option tab or edition window when you have more than 16 fields (columns) and screen size of 1080 pixel height. The window haven't vertical scroll bar so you get some columns and "ok", "cancel" buttons to be invisible. Simply use *[alt]+left mouse button to move whole window*.
 - ~~Date format actually can't handle single char. i.e: 4/12/18,  2018/12/4, cannot be used correctly. I will work on a future solution.~~ Resolved.
