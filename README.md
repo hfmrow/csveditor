@@ -24,22 +24,22 @@
 ## Some pictures and explanations  
 
 *This is the main screen.*  
-![Main](/images/main.png  "Main")  
+![Main](images/main.png  "Main")  
 
 *New row window. If no line is checked, you get this window. If one or more lines are checked, you get an edit window with a duplicate option for the last checked line. You can check [Cell editing on the fly] at the bottom left to edit a row directly by double-clicking a cell.*  
-![NewEntry](/images/newentry.png  "NewEntry")  
+![NewEntry](images/newentry.png  "NewEntry")  
 
 *Search option. Everything is said looking at the picture*  
-![Search option](/images/search.png  "Search option")  
+![Search option](images/search.png  "Search option")  
 
 *Selecting the table, Where you can change the target table, you have 3 modes, main, search and sort. Only the "main" tables have possibility to modify the options, "search" and "sort" can be sorted, searched, saved, edited. If you want to change the column options, you must select the main view, otherwise the option is grayed out.*  
-![Table selection](/images/tabsel.png  "Table selection")  
+![Table selection](images/tabsel.png  "Table selection")  
 
 *Options tab. Output file depend on selected options, field types are used in sort tab to define type of sorting, decimal character and date format are also used in it.*  
-![Options tab](/images/options.png  "Options tab")  
+![Options tab](images/options.png  "Options tab")  
 
 *Sort tab. The sort order must be taken into consideration to obtain the desired result*  
-![Sort tab](/images/sort.png  "Sort tab")  
+![Sort tab](images/sort.png  "Sort tab")  
 
 ## How to compile
 - Be sure you have golang installed in right way. [Go installation](https://golang.org/doc/install).
@@ -57,3 +57,6 @@
 ## You got an issue ?
 - Give information about used plateform and OS version.
 - Provide a method to reproduce the problem (possibly a sample with problem csv file).
+
+## Website
+- [H.F.M Linux softwares](https://hfmrow.yo.fr/) Free linux software on Github. Sharing knowledge.
