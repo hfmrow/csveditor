@@ -1,13 +1,21 @@
-# CsvEditor
+#### EOL project. Support, finished, updates will no longer be made for this software. Csv-editor v2 will arrive one of these days, for sure. (currently already done and in use for personal usage, but still in development. [WIP])
+
+---
+
+## CsvEditor
+
 *A simple software to Edit, create, modify, search, sort, save csv files.*
+
 - It is not designed to use with large csv files (over 10k entries), at the risk of longer processing times.
 - An issue exist with columns list, in option tab or edition window when you have more than 16 fields (columns) and screen size of 1080 pixels height. The window haven't vertical scroll bar so you get some columns and "ok", "cancel" buttons to be invisible. Simply use *[alt]+left mouse button to move whole window*.
 
-## How it's made
+### How it's made
+
 - Programmed with go language: [golang](https://golang.org/doc/) 
 - GUI provided by [andlabs go-libui](https://github.com/andlabs/ui), Platform-native GUI library for Go. 
 
-## Fonctionnalities
+### Fonctionnalities
+
 - Edition, on the fly or using fields window.
 - Adding/Removing/Duplicating row.
 - Adding/Removing fields.
@@ -21,7 +29,7 @@
 - Option for saving csv: charset type, line-end type, comma character.
 - Load csv via command line.
 
-## Some pictures and explanations  
+### Some pictures and explanations
 
 *This is the main screen.*  
 ![Main](images/main.png  "Main")  
@@ -41,22 +49,26 @@
 *Sort tab. The sort order must be taken into consideration to obtain the desired result*  
 ![Sort tab](images/sort.png  "Sort tab")  
 
-## How to compile
+### How to compile
+
 - Be sure you have golang installed in right way. [Go installation](https://golang.org/doc/install).
+
 - Open terminal window and at command prompt, type: `go get github.com/hfmrow/csveditor`
+
 - If you have a problem with GTK, please check at [andlabs go-libui](https://github.com/andlabs/ui) for gui installation instruction.
-	
+  
         Debian, Ubuntu, etc.: sudo apt-get install libgtk-3-dev
         Red Hat/Fedora, etc.: sudo dnf install gtk3-devel
 
-
 ### Misc informations
+
 - I'm working on linuxmint 18.3 (more informations available under release tab).
 - I haven't tested compilation under Windows or Mac OS, but all file access functions, line-end manipulations or charset implementation are made with OS portability in mind.  
 
 ## You got an issue ?
-- Give information about used plateform and OS version.
-- Provide a method to reproduce the problem (possibly a sample with problem csv file).
+
+- Sorry, no issue accepted for this EOL project.
 
 ## Website
+
 - [H.F.M Linux softwares](https://hfmrow.yo.fr/) Free linux software on Github. Sharing knowledge.
